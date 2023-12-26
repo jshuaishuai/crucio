@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "Crucio",
+    "slug": "crucio",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "version": "1.0.5",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.heiqi.crucio",
+      "buildNumber": "1"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "CAMERA_ROLL",
+        "MEDIA_LIBRARY",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "package": "com.heiqi.crucio"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "95ba8a3f-7ec1-4594-930c-7348f3700af4"
+      }
+    },
+    "owner": "tiandong",
+    "updates": {
+      "url": "https://u.expo.dev/f1ac84a9-5634-4ff4-90e1-65aa2c7cc23b",
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_ERROR_RECOVERY"
+    },
+    "plugins": [
+      [
+        "expo-updates",
+        {
+          "username": "tiandong"
+        }
+      ]
+    ]
+  }
+}

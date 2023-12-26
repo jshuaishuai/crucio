@@ -1,0 +1,117 @@
+const questions = [
+  {
+    id: 1,
+    text: "对对方整体满意程度",
+    name: "overallPoint",
+    type: "rating",
+  },
+  {
+    id: 2,
+    text: "(多选)你对对方的哪一点感到不满？",
+    name: "manyChoice",
+    type: "checkbox",
+    options: [
+      { optionId: 1, value: "认知、思想不契合、相差大", score: 0 },
+      { optionId: 2, value: "价值观(什么是有价值的)差异大", score: 1 },
+      { optionId: 3, value: "人生观(怎样的生活是有意义的)差异大", score: 2 },
+      {
+        optionId: 4,
+        value: "具体的理念不合(比如环保、女权之类敏感问题)",
+        score: 3,
+      },
+      { optionId: 5, value: "对对方的外表不满意", score: 4 },
+      { optionId: 6, value: "对方表现冷漠、不主动、不回应", score: 4 },
+      { optionId: 7, value: "对方谈吐、气质糟糕(包括不尊重你)", score: 4 },
+      { optionId: 8, value: "对对方的性格特质不满意", score: 4 },
+      { optionId: 9, value: "说不上来,但就是不喜欢", score: 4 },
+    ],
+  },
+  // 区分max和min
+  {
+    id: 3,
+    text: "你们在认知和思想上的契合程度。",
+    name: "thoughtQ",
+    type: "radio",
+    options: [
+      { optionId: 1, value: "非常契合,非常聊得来", score: 0 },
+      { optionId: 2, value: "比较契合", score: 0 },
+      { optionId: 3, value: "略微契合", score: 0 },
+      { optionId: 4, value: "略微不契合", score: 0 },
+      { optionId: 5, value: "比较不契合", score: 0 },
+      { optionId: 6, value: "非常不契合,你完全接受不了对方。", score: 0 },
+    ],
+  },
+  {
+    id: 4,
+    text: "你们在价值观方面(什么是有价值的)的契合程度",
+    name: "valuesQ",
+    type: "radio",
+    options: [
+      { optionId: 1, value: "非常契合,你非常欣赏对方的价值观", score: 0 },
+      { optionId: 2, value: "比较契合", score: 0 },
+      { optionId: 3, value: "略微契合", score: 0 },
+      { optionId: 4, value: "略微不契合", score: 0 },
+      { optionId: 5, value: "比较不契合", score: 0 },
+      { optionId: 6, value: "非常不契合,你完全接受不了对方。", score: 0 },
+    ],
+  },
+  {
+    id: 5,
+    text: "你们在人生观(怎样的生活是值得过的)方面的契合程度。",
+    name: "lifeQ",
+    type: "radio",
+    options: [
+      { optionId: 1, value: "非常契合,你非常欣赏对方的人生观", score: 0 },
+      { optionId: 2, value: "比较契合", score: 0 },
+      { optionId: 3, value: "略微契合", score: 0 },
+      { optionId: 4, value: "略微不契合", score: 0 },
+      { optionId: 5, value: "比较不契合", score: 0 },
+      { optionId: 6, value: "非常不契合,你完全接受不了对方。", score: 0 },
+    ],
+  },
+  {
+    id: 6,
+    text: "你是否喜欢对方的性格吗?",
+    name: "characterQ",
+    type: "radio",
+    options: [
+      { optionId: 1, value: "非常喜欢,你非常欣赏对方", score: 0 },
+      { optionId: 2, value: "比较契合", score: 0 },
+      { optionId: 3, value: "略微契合", score: 0 },
+      { optionId: 4, value: "略微不契合", score: 0 },
+      { optionId: 5, value: "比较不契合", score: 0 },
+      { optionId: 6, value: "非常不契合,你完全接受不了对方。", score: 0 },
+    ],
+  },
+  {
+    id: 7,
+    text: "你和对方是否存在很多意见不合、观点冲突的情况?",
+    name: "conflictQ",
+    type: "radio",
+    options: [
+      { optionId: 1, value: "不存在,你们志同道合", score: 0 },
+      { optionId: 2, value: "存在,但不是那么严重,影响不大", score: 0 },
+      { optionId: 3, value: "存在,严重但并不会因此完全无法接受对方", score: 0 },
+      { optionId: 4, value: "存在,且非常严重,你无法接受对方", score: 0 },
+    ],
+  },
+  {
+    id: 8,
+    text: "对方有不礼貌、羞辱你或者有骚扰你的行为吗?",
+    name: "humiliationQ",
+    type: "radio",
+    options: [
+      { optionId: 1, value: "没有", score: 0 },
+      { optionId: 2, value: "有,但不是很严重", score: 0 },
+      { optionId: 3, value: "有,且非常严重", score: 0 },
+    ],
+  },
+  {
+    id: 9,
+    text: "还有哪些你想反馈的,关于你讨厌对方的地方?(也可以直接联系我们,微信号:A782262776)",
+    name: "supplementQ",
+    type: "input",
+  },
+];
+
+export default questions;
