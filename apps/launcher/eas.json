@@ -1,9 +1,20 @@
 {
   "cli": {
-    "version": ">= 5.2.0"
+    "version": ">= 5.2.0",
+    "promptToConfigurePushNotifications": false
   },
   "build": {
+    "monorepo": {
+      "pnpm": "8.12.1",
+      "cache": {
+        "key": "turbo",
+        "paths": [
+          "../../node_modules/.cache/turbo"
+        ]
+      }
+    },
     "development": {
+      "extends": "monorepo",
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development"
@@ -24,7 +35,13 @@
   },
   "submit": {
     "production": {
+      "extends": "monorepo",
+      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle"
+      },
       "ios": {
+        "resourceClass": "m1-medium",
         "appleId": "heiqikeji@163.com"
       }
     }

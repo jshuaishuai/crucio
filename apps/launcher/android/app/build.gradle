@@ -119,7 +119,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.5"
+        versionName "1.0.6"
         manifestPlaceholders = [
           JPUSH_APPKEY: "ebae1fea7f785ba3d5ff8869",         //在此替换你的APPKey
           JPUSH_CHANNEL: "developer-default"        //在此替换你的channel

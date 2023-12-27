@@ -1,73 +1,3 @@
-.DS_Store
-.well-known
-.obsidian
-
-# node
-node_modules
-node-jiti
-npm-debug.log
-.env
-.env.*
-!.env.example
-!.env.deploy.example
-
-# app
-.nginx
-*.nginx.conf
-
-dist*/
-.hello-docs
-
-# IDE
-.idea
-
-*.sublime-project
-*.sublime-workspace
-
-sftp-config.json
-sftp-settings.json
-
-
-# agentx
-agentx-conf.json
-
-
-async.sh
-*.pem
-yarn-error.log
-
-
-
-.history
-dump.rdb
-
-.vscode-upload.json
-.cache
-package-lock.json
-
-*-debug.log
-*-error.log
-
-.nyc_output
-coverage
-packages/*/lib
-packages/*/*/lib
-
-.turbo
-
-stats.html
-
-gdlint-result.json
-vite.config.ts.*
-vite.config.mts.*
-packages/**/.npmrc
-widgets/**/.npmrc
-apps/**/.npmrc
-
-cypress/screenshots
-cypress/videos
-
-
 .expo/
 dist/
 npm-debug.*
@@ -81,6 +11,8 @@ web-build/
 
 
 # OSX
+#
+.DS_Store
 
 # Xcode
 #
@@ -105,6 +37,7 @@ ios/.xcode.env.local
 # Android/IntelliJ
 #
 build/
+.idea
 .gradle
 local.properties
 *.iml
@@ -114,7 +47,9 @@ local.properties
 !debug.keystore
 
 # node.js
-
+#
+node_modules/
+npm-debug.log
 yarn-error.log
 
 # fastlane
