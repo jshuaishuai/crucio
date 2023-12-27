@@ -1,0 +1,33 @@
+{
+  "name": "@crucio/request",
+  "version": "1.0.0",
+  "description": "标准请求库",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./dist/index.d.ts",
+  "keywords": [],
+  "author": "tiandong",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "galaxy-axios-adapter": "^0.0.1",
+    "lodash-es": "^4.17.21",
+    "query-string": "^8.1.0",
+    "@crucio/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.1",
+    "typescript": "^4.9.4"
+  }
+}

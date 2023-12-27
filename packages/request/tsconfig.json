@@ -1,0 +1,3 @@
+{
+  "extends": "@crucio/shared/configs/tsconfig.base.json",
+}
