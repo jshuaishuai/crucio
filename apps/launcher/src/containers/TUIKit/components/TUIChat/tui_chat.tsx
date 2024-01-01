@@ -1,13 +1,14 @@
-import {ThemeProvider} from '@rneui/themed';
-import React, {Fragment, useCallback, useMemo, useRef, useState} from 'react';
-import {Animated, findNodeHandle, StyleSheet} from 'react-native';
-import {View} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import type {V2TimMessage} from 'react-native-tim-js';
-import {useMessageList} from '../../hooks/useMessageList';
-import {TUIChatContextProvider} from '../../store';
-import {tuiChatTheme} from '../../theme';
-import {TUIChatHeader} from '../TUIChatHeader';
+import { ThemeProvider } from '@rneui/themed';
+import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { Animated, findNodeHandle, StyleSheet,TouchableOpacity } from 'react-native';
+import { View } from 'react-native-ui-lib';
+
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import type { V2TimMessage } from 'react-native-tim-js';
+import { useMessageList } from '../../hooks/useMessageList';
+import { TUIChatContextProvider } from '../../store';
+import { tuiChatTheme } from '../../theme';
+import { TUIChatHeader } from '../TUIChatHeader';
 import {
   AudioElement,
   composeKeyboardHeightWithMessageBubble,
@@ -24,30 +25,28 @@ import {
   withEditableRevokeMessage,
   withTapMergerElement,
 } from '../TUIMessage/element';
-import {withElement} from '../TUIMessage/tui_message';
+import { withElement } from '../TUIMessage/tui_message';
 import {
   TUIMessageInput,
   TUIMessageInputRef,
 } from '../TUIMessageInput/tui_message_input';
-import {TUIMessageList} from '../TUIMessageList';
+import { TUIMessageList } from '../TUIMessageList';
 import {
   KeyboardInsetsView,
   getEdgeInsetsForView,
 } from 'react-native-keyboard-insets';
-import {ViewDriver} from './driver/viewDriver';
-import type {Driver} from './driver/driver';
-import {KeyboardDriver} from './driver/keyboardDriver';
-import {TUIMessageEmoji} from '../TUIMessageInput/tui_message_emoji';
-import {TUIMessageToolBox} from '../TUIMessageInput/tui_message_tool_box';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-import type {TUIChatProps} from '../../interface';
-import {MessageAvatar} from '../TUIMessage/element/message_avatar';
-import {ScreenHeight, ScreenWidth} from '@rneui/base';
-// import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { ViewDriver } from './driver/viewDriver';
+import type { Driver } from './driver/driver';
+import { KeyboardDriver } from './driver/keyboardDriver';
+import { TUIMessageEmoji } from '../TUIMessageInput/tui_message_emoji';
+import { TUIMessageToolBox } from '../TUIMessageInput/tui_message_tool_box';
+import type { TUIChatProps } from '../../interface';
+import { MessageAvatar } from '../TUIMessage/element/message_avatar';
+import { ScreenHeight, ScreenWidth } from '@rneui/base';
 
 export const TUIChat = (props: TUIChatProps) => {
   const {
-    conversation: {showName, faceUrl},
+    conversation: { showName, faceUrl },
     showChatHeader,
     initialMessageList,
   } = props;
@@ -78,8 +77,8 @@ const MessageViewWithInput = (props: TUIChatProps) => {
     textInputOption,
     onMergeMessageTap,
   } = props;
-  const {loadMore} = useMessageList(conversation);
-  const {userID, groupID, type} = conversation;
+  const { loadMore } = useMessageList(conversation);
+  const { userID, groupID, type } = conversation;
   const convID = type === 1 ? userID : groupID;
   const tuiMessageInputRef = useRef<TUIMessageInputRef>(null);
   const senderRef = useRef<View>(null);
@@ -217,46 +216,49 @@ const MessageViewWithInput = (props: TUIChatProps) => {
 
   const viewNode = useRef<View | null>();
 
-  const gesture = Gesture.Tap().onStart(() => {
+
+  // 关闭聊天框
+  const handleEditingEnd = () => {
     driver?.hide(driverState);
-  });
+
+  }
 
   return (
     <Fragment>
-      <GestureDetector gesture={gesture}>
-        <Animated.View
-          style={[
-            styles.fill,
-            messageListContainerStyle,
-            {backgroundColor: 'white'},
-          ]}
-          ref={(ref: View | null | undefined) => (viewNode.current = ref)}
-          onLayout={() => {
-            viewNode.current?.measure((x, y, width, height) => {
-              keyboard.onFillMessageLayout(height);
-              emoji.onFillMessageLayout(height);
-              toolbox.onFillMessageLayout(height);
-            });
-          }}>
-          <TUIMessageList
-            MessageElement={messageItemOption?.ItemComponent ?? MessageElement}
-            onLoadMore={onLoadMore}
-            unmount={unMount}
-            onLayout={event => {
-              emoji.onMessageListLayout(event);
-              toolbox.onMessageListLayout(event);
-              keyboard.onMessageListLayout(event);
-            }}
-            onScroll={() => {
-              if (driver?.name === 'emoji') {
-                emoji.shown && emoji.hide(driverState);
-              } else {
-                toolbox.shown && toolbox.hide(driverState);
-              }
-            }}
-          />
-        </Animated.View>
-      </GestureDetector>
+      <TouchableOpacity activeOpacity={1} style={{flex: 1}} onPress={handleEditingEnd}>
+          <Animated.View
+            style={[
+              styles.fill,
+              messageListContainerStyle,
+              { backgroundColor: 'white' },
+            ]}
+            ref={(ref: View | null | undefined) => (viewNode.current = ref)}
+            onLayout={() => {
+              viewNode.current?.measure((x, y, width, height) => {
+                keyboard.onFillMessageLayout(height);
+                emoji.onFillMessageLayout(height);
+                toolbox.onFillMessageLayout(height);
+              });
+            }}>
+            <TUIMessageList
+              MessageElement={messageItemOption?.ItemComponent ?? MessageElement}
+              onLoadMore={onLoadMore}
+              unmount={unMount}
+              onLayout={event => {
+                emoji.onMessageListLayout(event);
+                toolbox.onMessageListLayout(event);
+                keyboard.onMessageListLayout(event);
+              }}
+              onScroll={() => {
+                if (driver?.name === 'emoji') {
+                  emoji.shown && emoji.hide(driverState);
+                } else {
+                  toolbox.shown && toolbox.hide(driverState);
+                }
+              }}
+            />
+          </Animated.View>
+      </TouchableOpacity> 
       <KeyboardInsetsView
         style={[mainStyle]}
         onKeyboard={keyboard.createCallback(driverState)}

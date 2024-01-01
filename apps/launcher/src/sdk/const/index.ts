@@ -1,8 +1,8 @@
 const Const = {
-  baseURL: "https://heiqi.crucio.cn/api", // 生产环境
-  // baseURL: "https://heiqi-test.crucio.cn/api", // 测试环境
-  wsURL: "ws://47.97.119.76:8888/api", // 生产环境
-  // wsURL: "ws://47.110.147.138:8888/api", // 测试环境
+  // baseURL: "https://heiqi.crucio.cn/api", // 生产环境
+  baseURL: "https://heiqi-test.crucio.cn/api", // 测试环境
+  // wsURL: "ws://47.97.119.76:8888/api", // 生产环境
+  wsURL: "ws://47.110.147.138:8888/api", // 测试环境
   cardList: [
     {
       id: "1",

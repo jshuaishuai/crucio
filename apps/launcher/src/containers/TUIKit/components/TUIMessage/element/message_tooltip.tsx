@@ -119,7 +119,7 @@ export const MessageToolTip: React.FC<{
 
   const gesture = Gesture.LongPress().onStart(event => {
     const {absoluteY, y} = event;
-    const halfHeight = componentPosition!.height;
+    const halfHeight = componentPosition?.height;
     if (Keyboard.isVisible()) {
       setTimeout(() => {
         setPositionY(

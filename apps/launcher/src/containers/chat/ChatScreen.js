@@ -11,6 +11,7 @@ import axios from "axios";
 
 const ChatScreen = ({navigation, route}) => {
   const {conversation, userID, unMount, initialMessageList} = route.params;
+  console.log('%c [ userID ]-14', 'font-size:13px; background:pink; color:#bf2c9f;', userID)
   const { user, setUser } = useContext(UserContext);
   const { coupleUser, setCoupleUser } = useContext(CoupleUserContext);
   const [menuVisible, setMenuVisible] = useState(false);

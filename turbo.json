@@ -19,6 +19,12 @@
     "dev:ios": {
       "cache": false
     },
+    "start:ios": {
+      "cache": false
+    },
+    "build-ios":{
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

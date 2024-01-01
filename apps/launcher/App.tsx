@@ -12,33 +12,36 @@ import PreferenceFoundationContext from "./src/sdk/context/preferenceFoundationC
 import MetricsContext from "./src/sdk/context/metricsContext";
 import UserBlogContext from "./src/sdk/context/blogContext";
 import ShipContext from "./src/sdk/context/shipContext";
-import Match from "./src/component/Match/Match";
-import MYInfo from "./src/component/MYInfo/MYInfo";
-import ProfileEdit from "./src/component/MYInfo/ProfileEdit/ProfileEdit";
-import AccountAndSecurity from "./src/component/MYInfo/AccountAndSecurity/AccountAndSecurity";
+import Match from "./src/components/Match/Match";
+import MYInfo from "./src/components/MYInfo/MYInfo";
+import ProfileEdit from "./src/components/MYInfo/ProfileEdit/ProfileEdit";
+import AccountAndSecurity from "./src/components/MYInfo/AccountAndSecurity/AccountAndSecurity";
 import { NavigationContainer } from "@react-navigation/native";
-import LoginByCode from "./src/component/Login/LoginByCode";
-import Login from "./src/component/Login/Login";
-import RegisterByCode from "./src/component/Register/RegisterByCode";
-import Register from "./src/component/Register/Register";
-import TAInfo from "./src/component/TAInfo/TAInfo";
-import Feedback from "./src/component/TAInfo/Feedback/Feedback";
-import PersonalityTest from "./src/component/MYInfo/ProfileEdit/PersonalityTest/PersonalityTest";
-import PreferenceBasic from "./src/component/Match/UserPreference/PreferenceTest/PreferenceBasic";
-import PreferenceComplex from "./src/component/Match/UserPreference/PreferenceTest/PreferenceComplex";
-// import ChatScreen from "./src/component/TAInfo/Chat/Chat";
-import RegisterProfile from "./src/component/Register/RegisterProfile";
+import LoginByCode from "./src/components/Login/LoginByCode";
+import Login from "./src/components/Login/Login";
+import RegisterByCode from "./src/components/Register/RegisterByCode";
+import Register from "./src/components/Register/Register";
+import TAInfo from "./src/components/TAInfo/TAInfo";
+import Feedback from "./src/components/TAInfo/Feedback/Feedback";
+import PersonalityTest from "./src/components/MYInfo/ProfileEdit/PersonalityTest/PersonalityTest";
+import PreferenceBasic from "./src/components/Match/UserPreference/PreferenceTest/PreferenceBasic";
+import PreferenceComplex from "./src/components/Match/UserPreference/PreferenceTest/PreferenceComplex";
+// import ChatScreen from "./src/components/TAInfo/Chat/Chat";
+import RegisterProfile from "./src/components/Register/RegisterProfile";
 import axios from "axios";
 import Const from "./src/sdk/const";
 import setAuthToken from "./src/sdk/utils/authToken";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert, AppState, Platform } from "react-native";
 import "./config"
-import EditingCard from "./src/component/MYInfo/EditableCard/EditingCard";
+import EditingCard from "./src/components/MYInfo/EditableCard/EditingCard";
 import * as Updates from 'expo-updates';
 import ChatScreen2 from "./src/containers/chat/ChatScreen";
 import Notification from "./src/containers/push/Notification";
 import { initChatSDK, setUserInfo, userLogin } from "./src/containers/chat/chatUtils";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -213,7 +216,7 @@ function MainPage() {
               console.log("当前token", res);
               setAuthToken(res);
             }
-          }).catch((err)=>{
+          }).catch((err) => {
             console.log("获取token失败")
             console.error(err)
           });
@@ -311,21 +314,21 @@ function MainPage() {
                         .catch((err) => {
                           console.log(err);
                         });
-                        
-                        // 匹配对象成功，跳转至聊天页面
-                        const convID = String(taId);
-                        navigation.navigate("Chat2", {
-                          conversation: {
-                            conversationID: `c2c_${convID}`,
-                            showName: res.data.data['userName'],
-                            userID: convID,
-                            groupID: "",
-                            type: 1,
-                          },
-                          userID: String(meId),
-                          initialMessageList: [],
-                          unMount: (message: V2TimMessage[]) => {},
-                        });
+
+                      // 匹配对象成功，跳转至聊天页面
+                      const convID = String(taId);
+                      navigation.navigate("Chat2", {
+                        conversation: {
+                          conversationID: `c2c_${convID}`,
+                          showName: res.data.data['userName'],
+                          userID: convID,
+                          groupID: "",
+                          type: 1,
+                        },
+                        userID: String(meId),
+                        initialMessageList: [],
+                        unMount: (message: V2TimMessage[]) => { },
+                      });
                     } else {
                       setCoupleUser({});
                       // setHasMatch(false);
@@ -337,10 +340,10 @@ function MainPage() {
               },
             },
           ]);
-        }else{
+        } else {
           const res = JSON.parse(datastr);
-          if(res["theme"]==="cutLove"){
-            Alert.alert(res["message"],"", [
+          if (res["theme"] === "cutLove") {
+            Alert.alert(res["message"], "", [
               {
                 text: "确定",
                 onPress: () => {
@@ -474,7 +477,7 @@ export default function App() {
 
   useEffect(() => {
 
-    async function autoFetchUpdate(){
+    async function autoFetchUpdate() {
       await Updates.fetchUpdateAsync();
       await Updates.reloadAsync();
     }
@@ -482,22 +485,24 @@ export default function App() {
       try {
         const update = await Updates.checkForUpdateAsync();
         if (update.isAvailable) {
-          
-          Alert.alert("新版本已发布，确认后将自动更新","",[
-        { text: "确定", onPress: () => {
-          console.log("OK Pressed")
-          autoFetchUpdate()
-        } },
-      ])
+
+          Alert.alert("新版本已发布，确认后将自动更新", "", [
+            {
+              text: "确定", onPress: () => {
+                console.log("OK Pressed")
+                autoFetchUpdate()
+              }
+            },
+          ])
         }
       } catch (error) {
         // You can also add an alert() to see the error message in case of an error when fetching updates.
         Alert.alert("自动更新有误，请到官网下载最新版本", `${error}`, [
-        { text: "确定", onPress: () => console.log("OK Pressed") },
-      ]);
+          { text: "确定", onPress: () => console.log("OK Pressed") },
+        ]);
       }
     }
-    if(Platform.OS == "android"){
+    if (Platform.OS == "android") {
       // 本地测试可以不跑
       onFetchUpdateAsync()
     }
@@ -577,10 +582,14 @@ export default function App() {
                 <PreferenceContext.Provider
                   value={{ preference, setPreference }}
                 >
-                  <NavigationContainer>
-                    <MainPage />
-                    <Notification userId={user.userId} />
-                  </NavigationContainer>
+                  {/* <GestureHandlerRootView> */}
+
+                    <NavigationContainer>
+                      <MainPage />
+                      <Notification userId={user.userId} />
+                    </NavigationContainer>
+                  {/* </GestureHandlerRootView> */}
+
                 </PreferenceContext.Provider>
               </PreferenceFoundationContext.Provider>
             </MetricsContext.Provider>
