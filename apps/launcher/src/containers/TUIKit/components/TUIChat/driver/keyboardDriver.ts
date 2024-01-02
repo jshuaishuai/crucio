@@ -30,6 +30,7 @@ export class KeyboardDriver implements Driver {
 
   createCallback = (state: DriverState) => {
     return (keyboard: KeyboardState) => {
+      console.log('%c [ keyboard ]-33', 'font-size:13px; background:pink; color:#bf2c9f;', keyboard)
       const {shown, height, position} = keyboard;
 
       const {bottom, driver, setDriver, setTranslateY, setTranslateMLY} = state;

@@ -36,12 +36,7 @@
   "submit": {
     "production": {
       "extends": "monorepo",
-      "distribution": "store",
-      "android": {
-        "buildType": "app-bundle"
-      },
       "ios": {
-        "resourceClass": "m1-medium",
         "appleId": "heiqikeji@163.com"
       }
     }

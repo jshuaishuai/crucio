@@ -16,13 +16,14 @@ export class ViewDriver implements Driver {
   messageListContainerHeight = 0;
 
   show = (state: DriverState) => {
-    console.log('show');
+    console.log('show23333____');
     const {bottom, driver, setDriver, setTranslateY, setTranslateMLY} = state;
+    console.log('%c [ driver ]-21', 'font-size:13px; background:pink; color:#bf2c9f;', driver)
 
     if (driver && driver !== this) {
       // 记录主界面当前位置
       this.y = driver.shown ? driver.height : 0;
-      // 隐藏前一个 driver
+      // // 隐藏前一个 driver
       driver.hide({
         bottom,
         driver: this,
@@ -47,6 +48,7 @@ export class ViewDriver implements Driver {
       duration: 200,
       useNativeDriver: true,
     }).start();
+    console.log('%c [ start ]-50', 'font-size:13px; background:pink; color:#bf2c9f;', '--------')
   };
 
   hide = (state: DriverState) => {
@@ -162,6 +164,7 @@ export class ViewDriver implements Driver {
   }
 
   onLayout = (event: LayoutChangeEvent) => {
+    console.log('%c [ event ]-165', 'font-size:13px; background:pink; color:#bf2c9f;', event)
     this.animation.setValue(event.nativeEvent.layout.height);
     this.height = event.nativeEvent.layout.height;
   };
