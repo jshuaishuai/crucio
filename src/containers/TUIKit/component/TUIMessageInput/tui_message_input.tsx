@@ -1,20 +1,22 @@
-import {Icon, Image, makeStyles, Text} from '@rneui/themed';
-import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
+import { Icon, Image, makeStyles, Text } from '@rneui/themed';
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import {
+  View,
+  StyleSheet,
   NativeSyntheticEvent,
   Platform,
   TextInput,
   TextInputSubmitEditingEventData,
+  ScrollView
 } from 'react-native';
-import {View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useLoginUser} from '../../hooks/useLoginUser';
-import {setRepliedMessage, useTUIChatContext} from '../../store';
-import {MessageService} from './message_service';
-import {VoiceButton} from './tui_message_voice_button';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLoginUser } from '../../hooks/useLoginUser';
+import { setRepliedMessage, useTUIChatContext } from '../../store';
+import { MessageService } from './message_service';
+import { VoiceButton } from './tui_message_voice_button';
 import runes from 'runes';
-import {useRepliedMessage} from '../../store/TUIChat/selector';
-import {MessageUtils} from '../../utils/message';
+import { useRepliedMessage } from '../../store/TUIChat/selector';
+import { MessageUtils } from '../../utils/message';
 import FastImage from 'react-native-fast-image';
 
 interface TUIMessageInputInterface {
@@ -50,13 +52,15 @@ export const TUIMessageInput = forwardRef<
     showSound = false,
     showToolBox = true,
   } = props;
-  const styles = useStyles();
   const [text, setText] = useState<string>('');
   const repliedMessage = useRepliedMessage();
   const [showVoiceRecord, setShowVoiceRecord] = useState(false);
   const textInputRef = useRef<TextInput | null>(null);
+  const scrollViewRef = useRef<ScrollView | null>(null);
   const loginUserInfo = useLoginUser(props.loginUserID);
-  const {dispatch} = useTUIChatContext();
+  const { dispatch } = useTUIChatContext();
+  const [inputHeight, setInputHeight] = useState(26);
+
   const messageService = new MessageService(dispatch, {
     userInfo: loginUserInfo,
     convID,
@@ -64,13 +68,40 @@ export const TUIMessageInput = forwardRef<
   });
 
   const handleTextChange = (value: string) => {
-    setText(value);
+    if (!value.includes('\n')) {
+      setText(value);
+    }
+    // setTimeout(() => {
+    //   scrollViewRef.current?.scrollToEnd?.({
+    //     animated: true
+    //   });
+    // }, 100); // 100 毫秒的延迟，根据需要调整
+  };
+
+  const handleContentSizeChange = (event) => {
+    const { contentSize } = event.nativeEvent;
+    // if(contentSize.height > 100){
+      requestAnimationFrame(() => {
+        scrollViewRef.current?.scrollTo({ y: contentSize.height, animated: true });
+      });
+    // }
+   
+    if (contentSize.height > inputHeight) {
+      setInputHeight(Math.min(contentSize.height, 100));
+    }
+    if (contentSize.height < inputHeight) {
+      setInputHeight(26);
+    }
+
   };
 
   useImperativeHandle(ref, () => ({
     getTextInputRef: () => textInputRef,
     addTextValue: (newText: string) => {
       setText(text + newText);
+      requestAnimationFrame(() => {
+        scrollViewRef.current?.scrollToEnd?.({ animated: true });
+      });
     },
     deleteTextValue: () => {
       setText(runes(text).slice(0, -1).join(''));
@@ -120,6 +151,9 @@ export const TUIMessageInput = forwardRef<
     )}: ${MessageUtils.getAbstractMessageAsync(repliedMessage!)}`;
   };
 
+  const onSubmitEditing = (event: any) => {
+    event.preventDefault();
+  }
   return (
     <SafeAreaView
       style={styles.safeAreaContainer}
@@ -130,7 +164,7 @@ export const TUIMessageInput = forwardRef<
             ellipsizeMode="tail"
             numberOfLines={3}
             h3
-            style={{color: '#8f959e'}}>
+            style={{ color: '#8f959e' }}>
             {getRepliedMessage()}
           </Text>
           <Icon
@@ -170,21 +204,38 @@ export const TUIMessageInput = forwardRef<
           {showVoiceRecord ? (
             <VoiceButton onSend={sendSoundMessage} />
           ) : (
-            <TextInput
-              onKeyPress={({nativeEvent}) => {
-                if (nativeEvent.key === 'Backspace') {
-                  if (repliedMessage && text === '') {
-                    handleBackSpaceTap();
-                  }
-                }
-              }}
-              ref={input => (textInputRef.current = input)}
-              onChangeText={handleTextChange}
-              onSubmitEditing={hanldeSubmiting}
-              style={styles.inputStyle}
-              returnKeyType="send"
-              value={text}
-            />
+            <View style={styles.inputWarp}>
+              <ScrollView
+                style={{ height: inputHeight }}
+                ref={scroll => (scrollViewRef.current = scroll)}
+              >
+                <TextInput
+                  onKeyPress={({ nativeEvent }) => {
+                    if (nativeEvent.key === 'Backspace') {
+                      if (repliedMessage && text === '') {
+                        handleBackSpaceTap();
+                      }
+                    }
+                    if (nativeEvent.key === 'Enter') {
+                      // 阻止默认的换行行为
+
+                      // README: onSubmitEditing 在multiline为true时候会失效
+                      // 可以监听多行文本输入框中按下回车键时执行提交逻辑
+                      hanldeSubmiting();
+                    }
+                  }}
+                  ref={input => (textInputRef.current = input)}
+                  onChangeText={handleTextChange}
+                  onSubmitEditing={onSubmitEditing}
+                  onContentSizeChange={handleContentSizeChange}
+                  style={[styles.input]}
+                  multiline={true}
+                  returnKeyType="send"
+                  value={text}
+                  // scrollEnabled={false}
+                />
+              </ScrollView>
+            </View>
           )}
         </View>
         {showFace && (
@@ -221,45 +272,66 @@ export const TUIMessageInput = forwardRef<
   );
 });
 
-const useStyles = makeStyles(theme => {
-  return {
-    safeAreaContainer: {
-      backgroundColor: '#EDEDED',
-    },
-    iconSize: {
-      height: 28,
-      width: 28,
-    },
-    rowContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      paddingLeft: 15,
-      paddingRight: 15,
-      // height: 35,
-      backgroundColor: '#EDEDED',
-      alignItems: 'center',
-      paddingTop: 10,
-      paddingBottom: 10,
-    },
-    inputStyle: {
-      height: 35,
-      backgroundColor: theme.colors.white,
-      paddingLeft: 4,
-    },
-    inputContainer: {
-      flex: 1,
-      marginLeft: 10,
-      marginRight: 10,
-      fontSize: 16,
-    },
-    repliedMessageContainer: {
-      paddingVertical: 10,
-      paddingHorizontal: 16,
-      backgroundColor: '#EDEDED',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-  };
-});
+const styles = StyleSheet.create({
+  safeAreaContainer: {
+    backgroundColor: '#EDEDED',
+
+  },
+  iconSize: {
+    height: 28,
+    width: 28,
+  },
+  rowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingLeft: 15,
+    paddingRight: 15,
+    // height: 35,
+    backgroundColor: '#EDEDED',
+    alignItems: 'center',
+    paddingTop: 10,
+    // paddingBottom: 10,
+  },
+  inputWarp: {
+    backgroundColor: '#fff',
+    paddingLeft: 5,
+    paddingRight: 5,
+    borderRadius: 8,
+    minHeight: 35,
+    paddingTop: 2,
+    paddingBottom: 6,
+    maxHeight: 120,
+
+
+  },
+  input: {
+    // paddingLeft: 6,
+    // textAlignVertical: 'middle',
+    lineHeight: 20,
+    fontSize: 16,
+    // borderColor: 'red'
+    borderRadius: 8,
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // borderStyle:'solid' 
+
+  },
+  inputContainer: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    fontSize: 16,
+
+  },
+  repliedMessageContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: '#EDEDED',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+})
+
+

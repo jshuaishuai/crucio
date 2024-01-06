@@ -118,11 +118,11 @@ const MatchButton = ({ mode }) => {
         ]);
         return
       }
-      if(res.data.code === 401){
-        setUser({});
-        navigation.navigate("Login");
-        return
-      }
+      // if(res.data.code === 401){
+      //   setUser({});
+      //   navigation.navigate("Login");
+      //   return
+      // }
     }else if(status === 0){
       const res = await axios.put(
         `${Const.baseURL}/user/updateUserMatchChoiceStop/${user["userId"]}`
@@ -183,7 +183,7 @@ const MatchButton = ({ mode }) => {
       {/* <TouchableOpacity style={styles.matchButton} onPress={match}>
         <Text style={styles.buttonText}>开始匹配</Text>
       </TouchableOpacity> */}
-      <TouchableOpacity style={{...styles.matchSwitch, backgroundColor: matchStatus === 1 ? "#b4dcfc" : "transparent"}} onPress={()=>handleMatchStatus(1)} disabled={matchStatus === 1}>
+      <TouchableOpacity style={{...styles.matchSwitch, backgroundColor: matchStatus === 1 ? "#b4dcfc" : "transparent"}} onPress={()=>handleMatchStatus(1)}>
         <Text style={styles.matchSwitchText}>开启匹配</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{...styles.matchSwitch, backgroundColor: matchStatus === 0 ? "#b4dcfc" : "transparent"}} onPress={()=>handleMatchStatus(0)} disabled={matchStatus === 0}>

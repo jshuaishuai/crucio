@@ -26,9 +26,26 @@ export default function EditingCard({route}) {
   const [editableContent, setEditableContent] = useState(content || "");
 
 
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+  //     if(content !== editableContent){
+  //       e.preventDefault();
+  //       Alert.alert("还未提交，是否确定退出","",[ { text: "确定", onPress: () => {
+  //         navigation.dispatch(e.data.action);
+  //       } }, { text: "取消", onPress: () => console.log("OK Pressed") }]);
+  //     }
+  //   });
+
+  //   return unsubscribe;
+  // }, [navigation, editableContent]);
+
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if(content !== editableContent){
+      if(content === editableContent){
+        return;
+      }
+      if(editableContent !== ''){
         e.preventDefault();
         Alert.alert("还未提交，是否确定退出","",[ { text: "确定", onPress: () => {
           navigation.dispatch(e.data.action);

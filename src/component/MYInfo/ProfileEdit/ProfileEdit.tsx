@@ -11,7 +11,8 @@ import {
   Alert,
 } from "react-native";
 import { Button, CheckBox } from "@rneui/themed";
-
+import moment from 'moment';
+import { DatePicker } from '@ant-design/react-native'
 import { Appbar, Card, IconButton, Divider } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
@@ -51,11 +52,13 @@ export default function ProfileEdit() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if(!finished){
+      if (!finished) {
         e.preventDefault();
-        Alert.alert("还未提交，是否确定退出","",[ { text: "确定", onPress: () => {
-          navigation.dispatch(e.data.action);
-        } }, { text: "返回", onPress: () => console.log("OK Pressed") }]);
+        Alert.alert("还未提交，是否确定退出", "", [{
+          text: "确定", onPress: () => {
+            navigation.dispatch(e.data.action);
+          }
+        }, { text: "返回", onPress: () => console.log("OK Pressed") }]);
       }
     });
 
@@ -126,16 +129,16 @@ export default function ProfileEdit() {
       }
 
       if (res.data.code === 400) {
-        Alert.alert(res.data.msg,"",[ { text: "确定", onPress: () => console.log("OK Pressed") }]);
+        Alert.alert(res.data.msg, "", [{ text: "确定", onPress: () => console.log("OK Pressed") }]);
         return;
       }
-      if(res.data.code === 200){
+      if (res.data.code === 200) {
         setFinished(true)
         setUser({ ...tempUser });
         navigation.navigate("BottomTabs");
       }
 
-      
+
     } catch (error) {
       console.error(error);
     }
@@ -244,7 +247,7 @@ export default function ProfileEdit() {
               style={styles.textInput}
               placeholder={tempUser["gender"] == 0 ? "女" : "男"}
               editable={false}
-              onChangeText={(value) => {}}
+              onChangeText={(value) => { }}
             />
           </View>
         </View>
@@ -264,16 +267,15 @@ export default function ProfileEdit() {
               </Text>
             </View>
           </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder={tempUser["birthDay"]}
-              editable={false}
-              underlineColorAndroid={"white"}
-              onChangeText={(value) => {}}
-            />
-          </View>
+          <DatePicker
+            mode="date"
+            title="请选择"
+            onChange={(value) => {
+              setTempUser({ ...tempUser, birthDay: moment(value).format('YYYY-MM-DD') });
+            }}
+            format="YYYY-MM-DD">
+            <Text style={styles.inputContainer}>{tempUser["birthDay"]}</Text>
+          </DatePicker>
         </View>
       </View>
       <Divider />
@@ -283,22 +285,22 @@ export default function ProfileEdit() {
         onPress={() => setIsHeightShow(!isHeightShow)}
         underlayColor="#E6E6E6"
       >
-      <View style={[styles.row]}>
-        <View style={styles.content}>
-          <View style={styles.leftPanel}>
-            <View style={styles.leftTitle}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  color: "#262626",
-                }}
-              >
-                身高
-              </Text>
+        <View style={[styles.row]}>
+          <View style={styles.content}>
+            <View style={styles.leftPanel}>
+              <View style={styles.leftTitle}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: "#262626",
+                  }}
+                >
+                  身高
+                </Text>
+              </View>
             </View>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", marginRight:15 }}>
-            {/* <TextInput
+            <View style={{ flexDirection: "row", alignItems: "center", marginRight: 15 }}>
+              {/* <TextInput
               style={styles.textInput}
               defaultValue={`${tempUser["height"]}`}
               //   editable={false}
@@ -308,10 +310,10 @@ export default function ProfileEdit() {
                 setTempUser({ ...tempUser, height: parseInt(value, 10) });
               }}
             /> */}
-            <Text>{`${tempUser["height"]  || "待填写"} 厘米`}</Text>
+              <Text>{`${tempUser["height"] || "待填写"} 厘米`}</Text>
+            </View>
           </View>
         </View>
-      </View>
       </TouchableHighlight>
       <Divider />
 
@@ -320,22 +322,22 @@ export default function ProfileEdit() {
         onPress={() => setIsWeightShow(!isWeightShow)}
         underlayColor="#E6E6E6"
       >
-      <View style={[styles.row]}>
-        <View style={styles.content}>
-          <View style={styles.leftPanel}>
-            <View style={styles.leftTitle}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  color: "#262626",
-                }}
-              >
-                体重
-              </Text>
+        <View style={[styles.row]}>
+          <View style={styles.content}>
+            <View style={styles.leftPanel}>
+              <View style={styles.leftTitle}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: "#262626",
+                  }}
+                >
+                  体重
+                </Text>
+              </View>
             </View>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", marginRight:15 }}>
-            {/* <TextInput
+            <View style={{ flexDirection: "row", alignItems: "center", marginRight: 15 }}>
+              {/* <TextInput
               style={styles.textInput}
               defaultValue={`${tempUser["weight"]}`}
               //   editable={false}
@@ -345,10 +347,10 @@ export default function ProfileEdit() {
                 setTempUser({ ...tempUser, weight: parseInt(value, 10) });
               }}
             /> */}
-            <Text>{`${tempUser["weight"]  || "待填写"}kg`}</Text>
+              <Text>{`${tempUser["weight"] || "待填写"}kg`}</Text>
+            </View>
           </View>
         </View>
-      </View>
       </TouchableHighlight>
       <Divider />
 
@@ -373,9 +375,8 @@ export default function ProfileEdit() {
             </View>
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text>{`${tempUser["addressA"] || "待填写"} ${
-                tempUser["addressB"] || ""
-              }`}</Text>
+              <Text>{`${tempUser["addressA"] || "待填写"} ${tempUser["addressB"] || ""
+                }`}</Text>
               <IconButton icon="chevron-right" size={20} />
             </View>
           </View>
@@ -404,9 +405,8 @@ export default function ProfileEdit() {
             </View>
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text>{`${tempUser["homeTownA"] || "待填写"} ${
-                tempUser["homeTownB"] || ""
-              }`}</Text>
+              <Text>{`${tempUser["homeTownA"] || "待填写"} ${tempUser["homeTownB"] || ""
+                }`}</Text>
               <IconButton icon="chevron-right" size={20} />
             </View>
           </View>
@@ -515,7 +515,7 @@ export default function ProfileEdit() {
           radius={99}
           onPress={async () => {
             await handleSubmit();
-            
+
           }}
           color="#b4dcfc"
           size="lg"
@@ -537,7 +537,7 @@ export default function ProfileEdit() {
           <Appbar.Header
             style={{ ...styles.appbar, justifyContent: "space-between" }}
           >
-            <Appbar.Content title="填写地址" onPress={() => {}} />
+            <Appbar.Content title="填写地址" onPress={() => { }} />
           </Appbar.Header>
 
           <View style={styles.pickerFatherContainer}>
@@ -616,7 +616,7 @@ export default function ProfileEdit() {
           <Appbar.Header
             style={{ ...styles.appbar, justifyContent: "space-between" }}
           >
-            <Appbar.Content title="填写地址" onPress={() => {}} />
+            <Appbar.Content title="填写地址" onPress={() => { }} />
           </Appbar.Header>
 
           <View style={styles.pickerFatherContainer}>
@@ -695,7 +695,7 @@ export default function ProfileEdit() {
           <Appbar.Header
             style={{ ...styles.appbar, justifyContent: "space-between" }}
           >
-            <Appbar.Content title="选择" onPress={() => {}} />
+            <Appbar.Content title="选择" onPress={() => { }} />
           </Appbar.Header>
           <Picker
             selectedValue={currEducation}
@@ -751,7 +751,7 @@ export default function ProfileEdit() {
           <Appbar.Header
             style={{ ...styles.appbar, justifyContent: "space-between" }}
           >
-            <Appbar.Content title="选择" onPress={() => {}} />
+            <Appbar.Content title="选择" onPress={() => { }} />
           </Appbar.Header>
           <Picker
             selectedValue={currIndustry}
@@ -794,111 +794,111 @@ export default function ProfileEdit() {
       {
         isHeightShow ? (
           <View
-          style={{
-            position: "absolute",
-            zIndex: 99,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#fff",
-          }}
-        >
-          <Appbar.Header
-            style={{ ...styles.appbar, justifyContent: "space-between" }}
+            style={{
+              position: "absolute",
+              zIndex: 99,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#fff",
+            }}
           >
-            <Appbar.Content title="选择height" onPress={() => {}} />
-          </Appbar.Header>
-          <Picker
-            selectedValue={currHeight}
-            onValueChange={(itemValue) => setCurrHeight(itemValue)}
-            style={{ marginTop: 20 }}
-          >
-            {heightList.map((item, index) => {
-              return <Picker.Item label={`${item}`} value={item} key={`height-${index}`} />;
-            })}
-          </Picker>
-          <View style={{ marginHorizontal: 20 }}>
-            <Button
-              style={{ marginHorizontal: 50, marginVertical: 10 }}
-              title="确定"
-              radius={99}
-              onPress={() => {
-                setTempUser({ ...tempUser, height: currHeight });
-                setIsHeightShow(false);
-                setFinished(false)
-              }}
-              color="#b4dcfc"
-              size="lg"
-            ></Button>
+            <Appbar.Header
+              style={{ ...styles.appbar, justifyContent: "space-between" }}
+            >
+              <Appbar.Content title="选择height" onPress={() => { }} />
+            </Appbar.Header>
+            <Picker
+              selectedValue={currHeight}
+              onValueChange={(itemValue) => setCurrHeight(itemValue)}
+              style={{ marginTop: 20 }}
+            >
+              {heightList.map((item, index) => {
+                return <Picker.Item label={`${item}`} value={item} key={`height-${index}`} />;
+              })}
+            </Picker>
+            <View style={{ marginHorizontal: 20 }}>
+              <Button
+                style={{ marginHorizontal: 50, marginVertical: 10 }}
+                title="确定"
+                radius={99}
+                onPress={() => {
+                  setTempUser({ ...tempUser, height: currHeight });
+                  setIsHeightShow(false);
+                  setFinished(false)
+                }}
+                color="#b4dcfc"
+                size="lg"
+              ></Button>
+            </View>
+            <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
+              <Button
+                style={{ marginHorizontal: 50, marginVertical: 10 }}
+                title="取消"
+                radius={99}
+                onPress={() => {
+                  setIsHeightShow(false);
+                }}
+                type="outline"
+                color="#b4dcfc"
+                size="lg"
+              ></Button>
+            </View>
           </View>
-          <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
-            <Button
-              style={{ marginHorizontal: 50, marginVertical: 10 }}
-              title="取消"
-              radius={99}
-              onPress={() => {
-                setIsHeightShow(false);
-              }}
-              type="outline"
-              color="#b4dcfc"
-              size="lg"
-            ></Button>
-          </View>
-        </View>
         ) : null
       }
       {
         isWeightShow ? (
           <View
-          style={{
-            position: "absolute",
-            zIndex: 99,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#fff",
-          }}
-        >
-          <Appbar.Header
-            style={{ ...styles.appbar, justifyContent: "space-between" }}
+            style={{
+              position: "absolute",
+              zIndex: 99,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#fff",
+            }}
           >
-            <Appbar.Content title="选择" onPress={() => {}} />
-          </Appbar.Header>
-          <Picker
-            selectedValue={currWeight}
-            onValueChange={(itemValue) => setCurrWeight(itemValue)}
-            style={{ marginTop: 20 }}
-          >
-            {weightList.map((item, index) => {
-              return <Picker.Item label={`${item}`} value={item} key={`weight=${index}`} />;
-            })}
-          </Picker>
-          <View style={{ marginHorizontal: 20 }}>
-            <Button
-              style={{ marginHorizontal: 50, marginVertical: 10 }}
-              title="确定"
-              radius={99}
-              onPress={() => {
-                setTempUser({ ...tempUser, weight: currWeight });
-                setIsWeightShow(false);
-                setFinished(false)
-              }}
-              color="#b4dcfc"
-              size="lg"
-            ></Button>
+            <Appbar.Header
+              style={{ ...styles.appbar, justifyContent: "space-between" }}
+            >
+              <Appbar.Content title="选择" onPress={() => { }} />
+            </Appbar.Header>
+            <Picker
+              selectedValue={currWeight}
+              onValueChange={(itemValue) => setCurrWeight(itemValue)}
+              style={{ marginTop: 20 }}
+            >
+              {weightList.map((item, index) => {
+                return <Picker.Item label={`${item}`} value={item} key={`weight=${index}`} />;
+              })}
+            </Picker>
+            <View style={{ marginHorizontal: 20 }}>
+              <Button
+                style={{ marginHorizontal: 50, marginVertical: 10 }}
+                title="确定"
+                radius={99}
+                onPress={() => {
+                  setTempUser({ ...tempUser, weight: currWeight });
+                  setIsWeightShow(false);
+                  setFinished(false)
+                }}
+                color="#b4dcfc"
+                size="lg"
+              ></Button>
+            </View>
+            <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
+              <Button
+                style={{ marginHorizontal: 50, marginVertical: 10 }}
+                title="取消"
+                radius={99}
+                onPress={() => {
+                  setIsWeightShow(false);
+                }}
+                type="outline"
+                color="#b4dcfc"
+                size="lg"
+              ></Button>
+            </View>
           </View>
-          <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
-            <Button
-              style={{ marginHorizontal: 50, marginVertical: 10 }}
-              title="取消"
-              radius={99}
-              onPress={() => {
-                setIsWeightShow(false);
-              }}
-              type="outline"
-              color="#b4dcfc"
-              size="lg"
-            ></Button>
-          </View>
-        </View>
         ) : null
       }
     </ScrollView>
@@ -934,7 +934,7 @@ const styles = StyleSheet.create({
   },
   row: {
     backgroundColor: "fff",
-    height:48,
+    height: 48,
     justifyContent: "center",
   },
   input: {

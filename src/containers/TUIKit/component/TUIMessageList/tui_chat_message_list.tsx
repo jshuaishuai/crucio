@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {LayoutChangeEvent, ListRenderItem, StyleSheet} from 'react-native';
+import {LayoutChangeEvent, ListRenderItem, StyleSheet,TouchableOpacity} from 'react-native';
 import {Keyboard} from 'react-native';
 import {FlatList} from 'react-native';
 import {View} from 'react-native';
@@ -12,6 +12,7 @@ interface TUIMessageListProps {
   unmount?: (messageList: V2TimMessage[]) => void;
   onLayout: (event: LayoutChangeEvent) => void;
   onScroll: () => void;
+  handleEditingEnd: ()=> void,
 }
 
 export const TUIMessageList = (props: TUIMessageListProps) => {
@@ -22,7 +23,8 @@ export const TUIMessageList = (props: TUIMessageListProps) => {
 
   const renderItem: ListRenderItem<V2TimMessage> = ({item}) => {
     const {MessageElement} = props;
-    return <MessageElement message={item} />;
+    return <TouchableOpacity onPress={props.handleEditingEnd} activeOpacity={1}><MessageElement message={item} /></TouchableOpacity>
+    // return <MessageElement message={item} />
   };
 
   const getMessageIdentifier = (message: V2TimMessage) => {

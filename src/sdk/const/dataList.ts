@@ -65,6 +65,10 @@ export const industryList = [
 
 export const addressList = [
   {
+    province: "海外地区",
+    cities: [""],
+  },
+  {
     province: "北京市",
     cities: ["市辖区"],
   },

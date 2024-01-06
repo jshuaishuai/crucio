@@ -113,9 +113,9 @@ const Questionnaire = () => {
     return (
       <RangeSlider
         style={styles.slider}
-        min={18}
+        min={16}
         max={50}
-        low={tempPreference["ageMin"]||18}
+        low={tempPreference["ageMin"]||16}
         high={tempPreference["ageMax"]||50}
         step={1}
         floatingLabel
@@ -164,7 +164,7 @@ const Questionnaire = () => {
           </View>
         );
       } else if (question["type"] === "range") {
-        const ageMin = tempPreference["ageMin"] || 18;
+        const ageMin = tempPreference["ageMin"] || 16;
         const ageMax = tempPreference["ageMax"] || 50;
         return (
           <View key={index} style={{ marginVertical: 15 }}>
@@ -208,7 +208,7 @@ const Questionnaire = () => {
         console.log("准备提交用户信息", JSON.stringify(tempPreference));
         const res = await axios.put(
           `${Const.baseURL}/user/UserPreference/insertUserPreferenceFoundation`,
-          {...tempPreference, ageMin: tempPreference["ageMin"]||18, ageMax: tempPreference["ageMax"]||50}
+          {...tempPreference, ageMin: tempPreference["ageMin"]||16, ageMax: tempPreference["ageMax"]||50}
         );
         // 跳转登录页面
         if (res.data.code === 401) {
@@ -222,10 +222,9 @@ const Questionnaire = () => {
         }
 
         setPreferenceFoundation({ ...tempPreference });
-        console.log("用户信息提交成功");
         console.log(JSON.stringify(preferenceFoundation));
-        Alert.alert("用户信息提交成功","",[ { text: "确定", onPress: () => console.log("OK Pressed") }]);
-        navigation.navigate("BottomTabs");
+        Alert.alert("用户信息提交成功","",[ { text: "确定", onPress: () => navigation.navigate("BottomTabs") }]);
+        
       } catch (error) {
         console.error(error);
         Alert.alert(`提交失败：${error}`,"",[ { text: "确定", onPress: () => console.log("OK Pressed") }]);
